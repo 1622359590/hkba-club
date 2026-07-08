@@ -65,6 +65,13 @@ npm run dev
 
 The frontend listens on `http://localhost:3000`.
 
+`npm run dev` uses Next.js with Webpack for local development. On the current macOS/Node setup, Next.js 16's default Turbopack dev server can stall while compiling `/` and emit noisy `MallocStackLogging` messages. To test Turbopack explicitly, run:
+
+```bash
+cd frontend
+npm run dev:turbo
+```
+
 ## Database And Seed Data
 
 The backend initializes the SQLite schema automatically on startup through `backend/db/init.js`.
