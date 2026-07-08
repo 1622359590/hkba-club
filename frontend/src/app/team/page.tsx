@@ -1,0 +1,51 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { useLang } from '@/lib/useLang';
+import { apiGet, imgUrl, type TeamMember } from '@/lib/api';
+
+const c: React.CSSProperties = { maxWidth: 1200, margin: '0 auto', padding: '0 24px' };
+const gl: Record<string, { zh: string; en: string }> = { honorary_chairman: { zh: '榮譽主席', en: 'Honorary Chairman' }, chairman: { zh: '會長', en: 'Chairman' }, vice_chairman: { zh: '副會長', en: 'Vice Chairman' }, committee: { zh: '委員', en: 'Committee' }, advisor: { zh: '顧問', en: 'Advisor' } };
+
+export default function TeamPage() {
+  const { t } = useLang();
+  const [team, setTeam] = useState<TeamMember[]>([]);
+  useEffect(() => { apiGet<TeamMember[]>('/api/team').then(setTeam).catch(() => {}); }, []);
+
+  const groups = team.reduce((a, m) => { if (!a[m.group_name]) a[m.group_name] = []; a[m.group_name].push(m); return a; }, {} as Record<string, TeamMember[]>);
+
+  return (
+    <>
+      <section style={{ padding: '96px 0', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.08) 0%, transparent 60%)' }} />
+        <div style={{ ...c, position: 'relative' }}>
+          <div style={{ animation: 'fadeInUp 0.8s cubic-bezier(0.22,1,0.36,1) forwards' }}>
+            <div className="section-label">{t('領導團隊', 'Leadership')}</div>
+            <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 700, letterSpacing: '-0.03em', marginBottom: 12 }}>{t('顧問委員會', 'Advisory Board')}</h1>
+            <p className="section-desc">{t('區塊鏈業內翹楚加入領導委員會', 'Industry leaders guiding our mission')}</p>
+            <div className="divider" style={{ marginTop: 20 }} />
+          </div>
+        </div>
+      </section>
+      <section style={{ paddingBottom: 96 }}>
+        <div style={c}>
+          {Object.entries(groups).map(([group, members]) => (
+            <div key={group} style={{ marginBottom: 64 }}>
+              <h2 style={{ fontSize: 13, fontWeight: 600, textAlign: 'center', marginBottom: 32, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t(gl[group]?.zh || group, gl[group]?.en || group)}</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 20 }}>
+                {members.map((m, i) => (
+                  <div key={m.id} className="glass-card" style={{ padding: 28, textAlign: 'center', animation: `fadeInUp 0.6s ${0.08 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
+                    <img src={imgUrl(m.avatar_url)} alt="" style={{ width: 80, height: 80, borderRadius: 16, objectFit: 'cover', marginBottom: 16, border: '2px solid rgba(255,255,255,0.06)' }} />
+                    <h4 style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>{t(m.name_zh, m.name_en)}</h4>
+                    <p style={{ fontSize: 12, color: '#818cf8', marginBottom: 8 }}>{t(m.title_zh, m.title_en)}</p>
+                    {(m.bio_zh || m.bio_en) && <p style={{ fontSize: 12, color: '#71717a', lineHeight: 1.5 }}>{t(m.bio_zh, m.bio_en)}</p>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+          {Object.keys(groups).length === 0 && <div style={{ textAlign: 'center', padding: '64px 0', color: '#52525b' }}>{t('暫無團隊信息', 'No team info')}</div>}
+        </div>
+      </section>
+    </>
+  );
+}
