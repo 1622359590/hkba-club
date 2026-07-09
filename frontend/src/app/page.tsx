@@ -55,8 +55,6 @@ export default function Home() {
       <section style={{ minHeight: '85vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.1) 0%, transparent 60%)' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '64px 64px', opacity: 0.5 }} />
-        <div style={{ position: 'absolute', top: '20%', left: '15%', width: 384, height: 384, borderRadius: '50%', background: 'rgba(99,102,241,0.08)', filter: 'blur(100px)' }} />
-
         <div style={{ ...container, position: 'relative', width: '100%', padding: '96px 24px' }}>
           <div style={{ animation: 'fadeInUp 0.8s cubic-bezier(0.22,1,0.36,1) forwards' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '4px 12px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', fontSize: 12, color: '#a1a1aa', marginBottom: 32 }}>
@@ -75,14 +73,24 @@ export default function Home() {
             </p>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-              {cur?.link_url && <a href={cur.link_url} target="_blank" rel="noopener noreferrer" className="btn-primary">{t('了解更多', 'Learn More')} →</a>}
+              {cur?.link_url ? <a href={cur.link_url} target="_blank" rel="noopener noreferrer" className="btn-primary">{t('了解更多', 'Learn More')} →</a> : <Link href="/news" className="btn-primary">{t('查看最新動態', 'Latest Updates')} →</Link>}
               <Link href="/about" className="btn-secondary">{t('關於協會', 'About')}</Link>
             </div>
           </div>
 
           {banners.length > 1 && (
             <div style={{ display: 'flex', gap: 8, marginTop: 64 }}>
-              {banners.map((_, i) => <button key={i} onClick={() => setIdx(i)} style={{ height: 4, borderRadius: 2, border: 'none', cursor: 'pointer', transition: 'all 0.3s', width: i === idx ? 32 : 16, background: i === idx ? '#6366f1' : 'rgba(255,255,255,0.1)' }} />)}
+              {banners.map((b, i) => (
+                <button
+                  key={b.id}
+                  type="button"
+                  className={`slider-dot ${i === idx ? 'is-active' : ''}`}
+                  aria-label={t(`切換至第 ${i + 1} 張橫幅`, `Show banner ${i + 1}`)}
+                  aria-current={i === idx}
+                  onClick={() => setIdx(i)}
+                  style={{ width: i === idx ? 34 : 18 }}
+                />
+              ))}
             </div>
           )}
         </div>
@@ -209,14 +217,21 @@ export default function Home() {
             {Object.entries(teamGroups).map(([group, members]) => (
               <div key={group} style={{ marginBottom: 48 }}>
                 <h3 style={{ fontSize: 13, fontWeight: 600, textAlign: 'center', marginBottom: 32, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t(gl[group]?.zh || group, gl[group]?.en || group)}</h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 20 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 20 }}>
                   {members.map((m, i) => (
                     <FadeIn key={m.id} delay={i * 0.08}>
-                      <div className="glass-card" style={{ padding: 28, textAlign: 'center' }}>
-                        <img src={imgUrl(m.avatar_url)} alt="" style={{ width: 80, height: 80, borderRadius: 16, objectFit: 'cover', marginBottom: 16, border: '2px solid rgba(255,255,255,0.06)' }} />
-                        <h4 style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>{t(m.name_zh, m.name_en)}</h4>
-                        <p style={{ fontSize: 12, color: '#818cf8', marginBottom: 8 }}>{t(m.title_zh, m.title_en)}</p>
-                        {(m.bio_zh || m.bio_en) && <p style={{ fontSize: 12, color: '#71717a', lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{t(m.bio_zh, m.bio_en)}</p>}
+                      <div className="glass-card profile-card">
+                        <div className="profile-card__head">
+                          <div className="profile-card__avatar-wrap">
+                            <img className="profile-card__avatar" src={imgUrl(m.avatar_url)} alt={t(m.name_zh, m.name_en)} />
+                          </div>
+                          <div style={{ minWidth: 0 }}>
+                            <span className="profile-card__eyebrow">{t(gl[group]?.zh || group, gl[group]?.en || group)}</span>
+                            <h4 className="profile-card__name">{t(m.name_zh, m.name_en)}</h4>
+                          </div>
+                        </div>
+                        <p className="profile-card__title">{t(m.title_zh, m.title_en)}</p>
+                        {(m.bio_zh || m.bio_en) && <p className="profile-card__bio">{t(m.bio_zh, m.bio_en)}</p>}
                       </div>
                     </FadeIn>
                   ))}
@@ -238,14 +253,23 @@ export default function Home() {
             </FadeIn>
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 20 }}>
               {partners.map((p, i) => {
+                const href = p.website_url || '/members';
                 const card = (
-                  <div className="glass-card" style={{ width: 160, height: 80, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
-                    <img src={imgUrl(p.logo_url)} alt={p.name} style={{ maxHeight: 40, maxWidth: 120, objectFit: 'contain', opacity: 0.6, filter: 'grayscale(1)', transition: 'all 0.3s' }} />
+                  <div className="partner-card">
+                    <img className="partner-logo" src={imgUrl(p.logo_url)} alt={p.name} />
                   </div>
                 );
                 return (
                   <FadeIn key={p.id} delay={i * 0.04}>
-                    {p.website_url ? <a href={p.website_url} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>{card}</a> : card}
+                    {p.website_url ? (
+                      <a href={href} target="_blank" rel="noopener noreferrer" className="partner-link" aria-label={`${p.name} website`}>
+                        {card}
+                      </a>
+                    ) : (
+                      <Link href={href} className="partner-link" aria-label={`${p.name} member profile`}>
+                        {card}
+                      </Link>
+                    )}
                   </FadeIn>
                 );
               })}
