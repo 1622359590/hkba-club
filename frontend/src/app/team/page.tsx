@@ -31,13 +31,20 @@ export default function TeamPage() {
           {Object.entries(groups).map(([group, members]) => (
             <div key={group} style={{ marginBottom: 64 }}>
               <h2 style={{ fontSize: 13, fontWeight: 600, textAlign: 'center', marginBottom: 32, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t(gl[group]?.zh || group, gl[group]?.en || group)}</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 20 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
                 {members.map((m, i) => (
-                  <div key={m.id} className="glass-card" style={{ padding: 28, textAlign: 'center', animation: `fadeInUp 0.6s ${0.08 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
-                    <img src={imgUrl(m.avatar_url)} alt="" style={{ width: 80, height: 80, borderRadius: 16, objectFit: 'cover', marginBottom: 16, border: '2px solid rgba(255,255,255,0.06)' }} />
-                    <h4 style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>{t(m.name_zh, m.name_en)}</h4>
-                    <p style={{ fontSize: 12, color: '#818cf8', marginBottom: 8 }}>{t(m.title_zh, m.title_en)}</p>
-                    {(m.bio_zh || m.bio_en) && <p style={{ fontSize: 12, color: '#71717a', lineHeight: 1.5 }}>{t(m.bio_zh, m.bio_en)}</p>}
+                  <div key={m.id} className="glass-card profile-card" style={{ animation: `fadeInUp 0.6s ${0.08 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
+                    <div className="profile-card__head">
+                      <div className="profile-card__avatar-wrap">
+                        <img className="profile-card__avatar" src={imgUrl(m.avatar_url)} alt={t(m.name_zh, m.name_en)} />
+                      </div>
+                      <div style={{ minWidth: 0 }}>
+                        <span className="profile-card__eyebrow">{t(gl[group]?.zh || group, gl[group]?.en || group)}</span>
+                        <h4 className="profile-card__name">{t(m.name_zh, m.name_en)}</h4>
+                      </div>
+                    </div>
+                    <p className="profile-card__title">{t(m.title_zh, m.title_en)}</p>
+                    {(m.bio_zh || m.bio_en) && <p className="profile-card__bio">{t(m.bio_zh, m.bio_en)}</p>}
                   </div>
                 ))}
               </div>

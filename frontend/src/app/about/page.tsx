@@ -7,6 +7,7 @@ import Link from 'next/link';
 const c: React.CSSProperties = { maxWidth: 1200, margin: '0 auto', padding: '0 24px' };
 const sec: React.CSSProperties = { padding: '96px 0' };
 const secB: React.CSSProperties = { ...sec, borderTop: '1px solid rgba(255,255,255,0.06)' };
+const gl: Record<string, { zh: string; en: string }> = { honorary_chairman: { zh: '榮譽主席', en: 'Honorary Chairman' }, chairman: { zh: '會長', en: 'Chairman' }, vice_chairman: { zh: '副會長', en: 'Vice Chairman' }, committee: { zh: '委員', en: 'Committee' }, advisor: { zh: '顧問', en: 'Advisor' } };
 
 export default function AboutPage() {
   const { t } = useLang();
@@ -80,8 +81,23 @@ export default function AboutPage() {
         <section style={secB}>
           <div style={c}>
             <div style={{ textAlign: 'center', marginBottom: 48 }}><div className="section-label">{t('合作夥伴', 'Partners')}</div><h2 className="section-title">{t('攜手共建生態', 'Building Together')}</h2></div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 16 }}>
-              {partners.map(p => <div key={p.id} className="glass-card" style={{ width: 140, height: 72, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 12 }}><img src={imgUrl(p.logo_url)} alt={p.name} style={{ maxHeight: 36, maxWidth: 100, objectFit: 'contain', opacity: 0.6, filter: 'grayscale(1)' }} /></div>)}
+            <div style={{ maxWidth: 980, margin: '0 auto' }}>
+              <div className="member-logo-grid">
+                {partners.map(p => {
+                  const card = (
+                    <div className="member-logo-card">
+                      <div className="member-logo-card__surface">
+                        <img src={imgUrl(p.logo_url)} alt={p.name} />
+                      </div>
+                    </div>
+                  );
+                  return p.website_url ? (
+                    <a key={p.id} href={p.website_url} target="_blank" rel="noopener noreferrer" className="member-logo-link" aria-label={`${p.name} website`}>{card}</a>
+                  ) : (
+                    <div key={p.id}>{card}</div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
@@ -91,8 +107,22 @@ export default function AboutPage() {
         <section style={secB}>
           <div style={c}>
             <div style={{ textAlign: 'center', marginBottom: 48 }}><div className="section-label">{t('領導團隊', 'Leadership')}</div><h2 className="section-title">{t('顧問委員會', 'Advisory Board')}</h2></div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 20 }}>
-              {team.slice(0, 4).map(m => <div key={m.id} className="glass-card" style={{ padding: 24, textAlign: 'center' }}><img src={imgUrl(m.avatar_url)} alt="" style={{ width: 72, height: 72, borderRadius: 14, objectFit: 'cover', marginBottom: 12, border: '2px solid rgba(255,255,255,0.06)' }} /><h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{t(m.name_zh, m.name_en)}</h4><p style={{ fontSize: 12, color: '#818cf8' }}>{t(m.title_zh, m.title_en)}</p></div>)}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
+              {team.slice(0, 4).map(m => (
+                <div key={m.id} className="glass-card profile-card">
+                  <div className="profile-card__head">
+                    <div className="profile-card__avatar-wrap">
+                      <img className="profile-card__avatar" src={imgUrl(m.avatar_url)} alt={t(m.name_zh, m.name_en)} />
+                    </div>
+                    <div style={{ minWidth: 0 }}>
+                      <span className="profile-card__eyebrow">{t(gl[m.group_name]?.zh || m.group_name, gl[m.group_name]?.en || m.group_name)}</span>
+                      <h4 className="profile-card__name">{t(m.name_zh, m.name_en)}</h4>
+                    </div>
+                  </div>
+                  <p className="profile-card__title">{t(m.title_zh, m.title_en)}</p>
+                  {(m.bio_zh || m.bio_en) && <p className="profile-card__bio">{t(m.bio_zh, m.bio_en)}</p>}
+                </div>
+              ))}
             </div>
             <div style={{ textAlign: 'center', marginTop: 32 }}><Link href="/team" className="btn-secondary">{t('查看全部', 'View All')} →</Link></div>
           </div>

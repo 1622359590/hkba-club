@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useLang } from '@/lib/useLang';
 import { apiGet, imgUrl, type Partner } from '@/lib/api';
+import Link from 'next/link';
 
 const c: React.CSSProperties = { maxWidth: 1200, margin: '0 auto', padding: '0 24px' };
 
@@ -29,12 +30,23 @@ export default function MembersPage() {
         <div style={c}>
           {Object.entries(groups).map(([group, members]) => (
             <div key={group} style={{ marginBottom: 48 }}>
-              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 20 }}>
+              <div className="member-logo-grid">
                 {members.map((p, i) => (
-                  <div key={p.id} className="glass-card" style={{ width: 160, height: 88, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, padding: 16, animation: `fadeInUp 0.5s ${0.04 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
-                    <img src={imgUrl(p.logo_url)} alt={p.name} style={{ maxHeight: 36, maxWidth: 120, objectFit: 'contain', opacity: 0.6, filter: 'grayscale(1)', transition: 'all 0.3s' }} />
-                    <span style={{ fontSize: 11, color: '#71717a' }}>{p.name}</span>
-                  </div>
+                  p.website_url ? (
+                    <a key={p.id} href={p.website_url} target="_blank" rel="noopener noreferrer" className="member-logo-link" aria-label={`${p.name} website`} style={{ animation: `fadeInUp 0.5s ${0.04 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
+                      <div className="member-logo-card">
+                        <div className="member-logo-card__surface"><img src={imgUrl(p.logo_url)} alt={p.name} /></div>
+                        <span className="member-logo-card__name">{p.name}</span>
+                      </div>
+                    </a>
+                  ) : (
+                    <Link key={p.id} href="/contact" className="member-logo-link" aria-label={`${p.name} contact`} style={{ animation: `fadeInUp 0.5s ${0.04 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
+                      <div className="member-logo-card">
+                        <div className="member-logo-card__surface"><img src={imgUrl(p.logo_url)} alt={p.name} /></div>
+                        <span className="member-logo-card__name">{p.name}</span>
+                      </div>
+                    </Link>
+                  )
                 ))}
               </div>
             </div>
