@@ -33,7 +33,7 @@ export default function TeamPage() {
               <h2 style={{ fontSize: 13, fontWeight: 600, textAlign: 'center', marginBottom: 32, color: '#818cf8', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{t(gl[group]?.zh || group, gl[group]?.en || group)}</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 20 }}>
                 {members.map((m, i) => (
-                  <div key={m.id} className="glass-card profile-card" style={{ animation: `fadeInUp 0.6s ${0.08 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
+                  <div key={m.id} className="glass-card profile-card content-reveal" style={{ animationDelay: `${0.08 * i}s` }}>
                     <div className="profile-card__head">
                       <div className="profile-card__avatar-wrap">
                         <img className="profile-card__avatar" src={imgUrl(m.avatar_url)} alt={t(m.name_zh, m.name_en)} />

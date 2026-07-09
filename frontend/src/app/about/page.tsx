@@ -51,7 +51,7 @@ export default function AboutPage() {
           <div style={c}>
             <div className="glass-card" style={{ padding: '48px 32px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 32 }}>
-                {stats.map(s => <div key={s.id} style={{ textAlign: 'center' }}><div className="gradient-text-accent" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 700, marginBottom: 4 }}>{s.value}</div><div style={{ fontSize: 12, color: '#71717a' }}>{t(s.label_zh, s.label_en)}</div></div>)}
+                {stats.map(s => <div key={s.id} style={{ textAlign: 'center' }}><div className="metric-accent" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 700, marginBottom: 4 }}>{s.value}</div><div style={{ fontSize: 12, color: '#71717a' }}>{t(s.label_zh, s.label_en)}</div></div>)}
               </div>
             </div>
           </div>
@@ -67,9 +67,9 @@ export default function AboutPage() {
             <div style={{ position: 'relative', textAlign: 'left' }}>
               <div style={{ position: 'absolute', left: 5, top: 0, bottom: 0, width: 1, background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent)' }} />
               {milestones.map((m, i) => (
-                <div key={m.id} style={{ display: 'flex', gap: 20, marginBottom: 36, animation: `fadeInUp 0.6s ${0.1 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
+                <div key={m.id} className="content-reveal" style={{ display: 'flex', gap: 20, marginBottom: 36, animationDelay: `${0.1 * i}s` }}>
                   <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#6366f1', flexShrink: 0, marginTop: 4, boxShadow: '0 0 0 4px #09090b' }} />
-                  <div><div className="gradient-text-accent" style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>{m.year}</div><h4 style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>{t(m.title_zh, m.title_en)}</h4><p style={{ fontSize: 14, color: '#71717a', lineHeight: 1.6 }}>{t(m.description_zh, m.description_en)}</p></div>
+                  <div><div className="metric-accent" style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>{m.year}</div><h4 style={{ fontSize: 15, fontWeight: 600, marginBottom: 4 }}>{t(m.title_zh, m.title_en)}</h4><p style={{ fontSize: 14, color: '#71717a', lineHeight: 1.6 }}>{t(m.description_zh, m.description_en)}</p></div>
                 </div>
               ))}
             </div>

@@ -22,8 +22,6 @@ export default function AdminLogin() {
     } catch { setError('網絡錯誤'); } finally { setLoading(false); }
   };
 
-  const inputStyle: React.CSSProperties = { width: '100%', padding: '10px 14px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 10, fontSize: 14, color: '#fff', outline: 'none', transition: 'border-color 0.2s' };
-
   return (
     <div style={{ minHeight: '100vh', background: '#09090b', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div style={{ width: '100%', maxWidth: 360 }}>
@@ -35,14 +33,14 @@ export default function AdminLogin() {
         <form onSubmit={handleLogin} style={{ background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: 28 }}>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: 'block', fontSize: 12, color: '#71717a', marginBottom: 6, fontWeight: 500 }}>用戶名</label>
-            <input type="text" value={username} onChange={e => setUsername(e.target.value)} style={inputStyle} onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(99,102,241,0.5)'} onBlur={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(255,255,255,0.08)'} required />
+            <input type="text" value={username} onChange={e => setUsername(e.target.value)} className="form-input" required />
           </div>
           <div style={{ marginBottom: 20 }}>
             <label style={{ display: 'block', fontSize: 12, color: '#71717a', marginBottom: 6, fontWeight: 500 }}>密碼</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} style={inputStyle} onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(99,102,241,0.5)'} onBlur={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(255,255,255,0.08)'} required />
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="form-input" required />
           </div>
           {error && <p style={{ fontSize: 13, color: '#ef4444', marginBottom: 12 }}>{error}</p>}
-          <button type="submit" disabled={loading} style={{ width: '100%', padding: '10px 0', background: '#6366f1', color: '#fff', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 500, cursor: loading ? 'default' : 'pointer', opacity: loading ? 0.6 : 1, transition: 'all 0.2s' }}>
+          <button type="submit" disabled={loading} className="btn-accent" style={{ width: '100%', justifyContent: 'center', padding: '10px 0', cursor: loading ? 'default' : 'pointer', opacity: loading ? 0.6 : 1 }}>
             {loading ? '登入中...' : '登入'}
           </button>
         </form>

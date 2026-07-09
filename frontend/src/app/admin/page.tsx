@@ -10,6 +10,7 @@ type Counts = {
   partners: number;
   events: number;
   messages: number;
+  unreadMessages: number;
 };
 
 type RecentNews = {
@@ -39,7 +40,7 @@ function Icon({ path, size = 18 }: { path: string; size?: number }) {
 }
 
 export default function AdminDashboard() {
-  const [counts, setCounts] = useState<Counts>({ banners: 0, news: 0, team: 0, partners: 0, events: 0, messages: 0 });
+  const [counts, setCounts] = useState<Counts>({ banners: 0, news: 0, team: 0, partners: 0, events: 0, messages: 0, unreadMessages: 0 });
   const [recentNews, setRecentNews] = useState<RecentNews[]>([]);
 
   useEffect(() => {
@@ -50,8 +51,9 @@ export default function AdminDashboard() {
       adminGet<unknown[]>('/api/partners/all').then(d => d.length).catch(() => 0),
       adminGet<unknown[]>('/api/events/admin/all').then(d => d.length).catch(() => 0),
       adminGet<unknown[]>('/api/contact/messages').then(d => d.length).catch(() => 0),
-    ]).then(([banners, allNews, team, partners, events, messages]) => {
-      setCounts({ banners, news: allNews.length, team, partners, events, messages });
+      adminGet<{ count: number }>('/api/contact/messages/unread-count').then(d => d.count).catch(() => 0),
+    ]).then(([banners, allNews, team, partners, events, messages, unreadMessages]) => {
+      setCounts({ banners, news: allNews.length, team, partners, events, messages, unreadMessages });
       setRecentNews(allNews.slice(0, 5));
     });
   }, []);
@@ -62,7 +64,7 @@ export default function AdminDashboard() {
     { label: '活動', count: counts.events, href: '/admin/events', icon: icons.event, hint: '活動日程與報名資訊' },
     { label: '團隊', count: counts.team, href: '/admin/team', icon: icons.team, hint: '顧問與委員資料' },
     { label: '會員', count: counts.partners, href: '/admin/members', icon: icons.member, hint: '夥伴 logo 與連結' },
-    { label: '留言', count: counts.messages, href: '/admin/messages', icon: icons.message, hint: '訪客聯絡與詢問' },
+    { label: '留言', count: counts.unreadMessages, href: '/admin/messages', icon: icons.message, hint: `${counts.messages} 條總留言，未讀優先處理` },
   ];
 
   const liveNews = recentNews.filter(item => item.is_published).length;
@@ -144,7 +146,7 @@ export default function AdminDashboard() {
             <Link href="/admin/messages" className="admin-list-link" style={{ borderTop: 'none', padding: '12px 0' }}>
               <span>
                 <span style={{ display: 'block', color: '#e4e4e7', fontSize: 13, fontWeight: 650 }}>處理留言</span>
-                <span style={{ display: 'block', color: '#71717a', fontSize: 12, marginTop: 2 }}>{counts.messages} 條待查看</span>
+                <span style={{ display: 'block', color: '#71717a', fontSize: 12, marginTop: 2 }}>{counts.unreadMessages} 條未讀，{counts.messages} 條總留言</span>
               </span>
               <span style={{ color: '#818cf8' }}><Icon path={icons.arrow} size={17} /></span>
             </Link>

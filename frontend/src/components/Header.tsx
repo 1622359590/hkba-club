@@ -31,7 +31,7 @@ export default function Header() {
         background: scrolled ? 'rgba(9,9,11,0.85)' : 'transparent',
         backdropFilter: scrolled ? 'blur(20px)' : 'none',
         borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
-        transition: 'all 0.3s',
+        transition: 'background 0.24s cubic-bezier(0.22,1,0.36,1), border-color 0.24s cubic-bezier(0.22,1,0.36,1), backdrop-filter 0.24s cubic-bezier(0.22,1,0.36,1)',
       }}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

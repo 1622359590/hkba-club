@@ -33,14 +33,14 @@ export default function MembersPage() {
               <div className="member-logo-grid">
                 {members.map((p, i) => (
                   p.website_url ? (
-                    <a key={p.id} href={p.website_url} target="_blank" rel="noopener noreferrer" className="member-logo-link" aria-label={`${p.name} website`} style={{ animation: `fadeInUp 0.5s ${0.04 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
+                    <a key={p.id} href={p.website_url} target="_blank" rel="noopener noreferrer" className="member-logo-link content-reveal" aria-label={`${p.name} website`} style={{ animationDelay: `${0.04 * i}s` }}>
                       <div className="member-logo-card">
                         <div className="member-logo-card__surface"><img src={imgUrl(p.logo_url)} alt={p.name} /></div>
                         <span className="member-logo-card__name">{p.name}</span>
                       </div>
                     </a>
                   ) : (
-                    <Link key={p.id} href="/contact" className="member-logo-link" aria-label={`${p.name} contact`} style={{ animation: `fadeInUp 0.5s ${0.04 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
+                    <Link key={p.id} href="/contact" className="member-logo-link content-reveal" aria-label={`${p.name} contact`} style={{ animationDelay: `${0.04 * i}s` }}>
                       <div className="member-logo-card">
                         <div className="member-logo-card__surface"><img src={imgUrl(p.logo_url)} alt={p.name} /></div>
                         <span className="member-logo-card__name">{p.name}</span>

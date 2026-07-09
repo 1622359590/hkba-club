@@ -1,7 +1,6 @@
 'use client';
 import { useState, ReactNode } from 'react';
 
-const inputBase: React.CSSProperties = { width: '100%', padding: '8px 12px', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 8, fontSize: 13, color: '#fff', outline: 'none', transition: 'border-color 0.2s' };
 const labelStyle: React.CSSProperties = { display: 'block', fontSize: 12, color: '#71717a', marginBottom: 6, fontWeight: 500 };
 
 export function FormField({ label, children, required }: { label: string; children: ReactNode; required?: boolean }) {
@@ -9,22 +8,22 @@ export function FormField({ label, children, required }: { label: string; childr
 }
 
 export function Input({ value, onChange, type, placeholder }: { value: string; onChange: (v: string) => void; type?: string; placeholder?: string }) {
-  return <input value={value} onChange={e => onChange(e.target.value)} type={type} placeholder={placeholder} style={inputBase} onFocus={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(99,102,241,0.5)'} onBlur={e => (e.target as HTMLInputElement).style.borderColor = 'rgba(255,255,255,0.08)'} />;
+  return <input value={value} onChange={e => onChange(e.target.value)} type={type} placeholder={placeholder} className="form-input" style={{ padding: '8px 12px', borderRadius: 8, fontSize: 13 }} />;
 }
 
 export function Textarea({ value, onChange, rows = 4 }: { value: string; onChange: (v: string) => void; rows?: number }) {
-  return <textarea value={value} onChange={e => onChange(e.target.value)} rows={rows} style={{ ...inputBase, resize: 'vertical' as const }} onFocus={e => (e.target as HTMLTextAreaElement).style.borderColor = 'rgba(99,102,241,0.5)'} onBlur={e => (e.target as HTMLTextAreaElement).style.borderColor = 'rgba(255,255,255,0.08)'} />;
+  return <textarea value={value} onChange={e => onChange(e.target.value)} rows={rows} className="form-input" style={{ padding: '8px 12px', borderRadius: 8, fontSize: 13, resize: 'vertical' as const }} />;
 }
 
 export function Select({ value, onChange, options }: { value: string; onChange: (v: string) => void; options: { value: string; label: string }[] }) {
-  return <select value={value} onChange={e => onChange(e.target.value)} style={{ ...inputBase, cursor: 'pointer' }}>{options.map(o => <option key={o.value} value={o.value} style={{ background: '#17171a' }}>{o.label}</option>)}</select>;
+  return <select value={value} onChange={e => onChange(e.target.value)} className="form-input" style={{ padding: '8px 12px', borderRadius: 8, fontSize: 13, cursor: 'pointer' }}>{options.map(o => <option key={o.value} value={o.value} style={{ background: '#17171a' }}>{o.label}</option>)}</select>;
 }
 
 export function Toggle({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) {
   return (
     <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
       <div style={{ width: 36, height: 20, borderRadius: 10, background: checked ? '#6366f1' : 'rgba(255,255,255,0.1)', position: 'relative', transition: 'background 0.2s' }}>
-        <div style={{ width: 16, height: 16, borderRadius: '50%', background: '#fff', position: 'absolute', top: 2, left: checked ? 18 : 2, transition: 'left 0.2s' }} />
+        <div style={{ width: 16, height: 16, borderRadius: '50%', background: '#fff', position: 'absolute', top: 2, left: 2, transform: checked ? 'translateX(16px)' : 'translateX(0)', transition: 'transform 0.2s' }} />
       </div>
       <span style={{ fontSize: 13, color: '#a1a1aa' }}>{label}</span>
       <input type="checkbox" checked={checked} onChange={e => onChange(e.target.checked)} style={{ display: 'none' }} />
@@ -62,8 +61,8 @@ export function ImageField({ value, onChange, label }: { value: string; onChange
     <FormField label={label}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
         {value && <img src={value.startsWith('http') ? value : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:37900'}${value}`} alt="" style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)' }} />}
-        <label style={{ cursor: 'pointer', padding: '6px 12px', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 6, fontSize: 12, color: '#a1a1aa', transition: 'border-color 0.2s, color 0.2s, background 0.2s' }}>{uploading ? '上傳中...' : '選擇圖片'}<input type="file" accept="image/*" onChange={handleUpload} style={{ display: 'none' }} /></label>
-        {value && <button onClick={() => onChange('')} style={{ fontSize: 12, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}>移除</button>}
+        <label className="admin-action is-muted" style={{ cursor: 'pointer' }}>{uploading ? '上傳中...' : '選擇圖片'}<input type="file" accept="image/*" onChange={handleUpload} style={{ display: 'none' }} /></label>
+        {value && <button type="button" onClick={() => onChange('')} className="admin-action is-danger">移除</button>}
       </div>
       <Input value={value} onChange={onChange} placeholder="或輸入圖片 URL" />
       {uploadError && <p style={{ color: '#fca5a5', fontSize: 12, marginTop: 6 }}>{uploadError}</p>}
@@ -73,7 +72,7 @@ export function ImageField({ value, onChange, label }: { value: string; onChange
 
 export function AdminCard({ title, children, actions }: { title: string; children: ReactNode; actions?: ReactNode }) {
   return (
-    <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 12, padding: 24, marginBottom: 24 }}>
+    <div className="admin-panel" style={{ padding: 24, marginBottom: 24 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
         <h3 style={{ fontSize: 14, fontWeight: 600, color: '#fff' }}>{title}</h3>
         {actions && <div style={{ display: 'flex', gap: 8 }}>{actions}</div>}

@@ -14,8 +14,8 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     if (res.status === 401) { localStorage.removeItem('hkba_admin_token'); window.location.href = '/admin/login'; throw new Error('Unauthorized'); }
     if (!res.ok) throw new Error(`Error: ${res.status}`);
     return res.json();
-  } catch (err: any) {
-    if (err.message === 'No token' || err.message === 'Unauthorized') throw err;
+  } catch (err: unknown) {
+    if (err instanceof Error && (err.message === 'No token' || err.message === 'Unauthorized')) throw err;
     throw new Error('網絡錯誤，請確認後端服務是否運行');
   }
 }

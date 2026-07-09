@@ -45,7 +45,7 @@ export default function NewsPage() {
           {categories.length > 0 && (
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 32 }}>
               {[{ value: 'all', label: t('全部', 'All') }, ...categories.map(value => ({ value, label: value }))].map(item => (
-                <button key={item.value} onClick={() => setCategory(item.value)} style={{ padding: '7px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.08)', background: category === item.value ? '#6366f1' : 'rgba(255,255,255,0.03)', color: category === item.value ? '#fff' : '#a1a1aa', fontSize: 13, cursor: 'pointer' }}>
+                <button key={item.value} onClick={() => setCategory(item.value)} className="filter-chip" style={{ padding: '7px 12px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.08)', background: category === item.value ? '#6366f1' : 'rgba(255,255,255,0.03)', color: category === item.value ? '#fff' : '#a1a1aa', fontSize: 13, cursor: 'pointer' }}>
                   {item.label}
                 </button>
               ))}
@@ -56,7 +56,7 @@ export default function NewsPage() {
           {!loading && !error && (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 24 }}>
               {visibleNews.map((item, i) => (
-                <Link key={item.id} href={`/news/${item.id}`} className="glass-card" style={{ overflow: 'hidden', display: 'block', textDecoration: 'none', color: 'inherit', animation: `fadeInUp 0.6s ${0.08 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
+                <Link key={item.id} href={`/news/${item.id}`} className="glass-card content-reveal" style={{ overflow: 'hidden', display: 'block', textDecoration: 'none', color: 'inherit', animationDelay: `${0.08 * i}s` }}>
                   {item.cover_image && <div style={{ height: 200, overflow: 'hidden' }}><img src={imgUrl(item.cover_image)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} /></div>}
                   <div style={{ padding: 24 }}>
                     <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
@@ -74,7 +74,7 @@ export default function NewsPage() {
           {!loading && !error && category === 'all' && total > 9 && (
             <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 48 }}>
               {Array.from({ length: Math.ceil(total / 9) }, (_, i) => (
-                <button key={i + 1} onClick={() => setPage(i + 1)} style={{ width: 36, height: 36, borderRadius: 8, fontSize: 13, fontWeight: 500, border: 'none', cursor: 'pointer', transition: 'all 0.2s', background: page === i + 1 ? '#6366f1' : 'rgba(255,255,255,0.04)', color: page === i + 1 ? '#fff' : '#a1a1aa' }}>{i + 1}</button>
+                <button key={i + 1} onClick={() => setPage(i + 1)} className="pagination-button" style={{ width: 36, height: 36, borderRadius: 8, fontSize: 13, fontWeight: 500, border: '1px solid transparent', cursor: 'pointer', background: page === i + 1 ? '#6366f1' : 'rgba(255,255,255,0.04)', color: page === i + 1 ? '#fff' : '#a1a1aa' }}>{i + 1}</button>
               ))}
             </div>
           )}

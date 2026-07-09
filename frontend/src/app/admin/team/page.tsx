@@ -6,8 +6,6 @@ import { FormField, Input, BilingualField, ImageField, Select, Toggle, AdminCard
 interface TeamMember { id: number; name_zh: string; name_en: string; title_zh: string; title_en: string; bio_zh: string; bio_en: string; avatar_url: string; group_name: string; social_facebook: string; social_twitter: string; social_linkedin: string; social_instagram: string; sort_order: number; is_active: number; }
 const groups = [{value:'honorary_chairman',label:'榮譽主席'},{value:'chairman',label:'會長'},{value:'vice_chairman',label:'副會長'},{value:'committee',label:'委員'},{value:'advisor',label:'顧問'}];
 const empty = { name_zh:'', name_en:'', title_zh:'', title_en:'', bio_zh:'', bio_en:'', avatar_url:'', group_name:'committee', social_facebook:'', social_twitter:'', social_linkedin:'', social_instagram:'', sort_order:0, is_active:1 };
-const btnEdit: React.CSSProperties = { fontSize: 12, color: '#818cf8', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', borderRadius: 4 };
-const btnDel: React.CSSProperties = { fontSize: 12, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', borderRadius: 4 };
 
 export default function TeamAdmin() {
   const [items, setItems] = useState<TeamMember[]>([]);
@@ -24,12 +22,12 @@ export default function TeamAdmin() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 600, color: '#fff' }}>團隊管理</h1>
+      <div className="admin-page-heading">
+        <h1 className="admin-page-title">團隊管理</h1>
         <button onClick={() => { setEditing(null); setForm(empty); setShowForm(true); }} className="btn-accent" style={{ fontSize: 13 }}>+ 新增成員</button>
       </div>
       {showForm && (
-        <AdminCard title={editing ? '編輯成員' : '新增成員'} actions={<button onClick={() => { setShowForm(false); setEditing(null); }} style={{ fontSize: 12, color: '#71717a', background: 'none', border: 'none', cursor: 'pointer' }}>取消</button>}>
+        <AdminCard title={editing ? '編輯成員' : '新增成員'} actions={<button type="button" onClick={() => { setShowForm(false); setEditing(null); }} className="admin-action is-muted">取消</button>}>
           <BilingualField label="姓名" valueZh={form.name_zh} valueEn={form.name_en} onChangeZh={v => setForm(f => ({...f, name_zh: v}))} onChangeEn={v => setForm(f => ({...f, name_en: v}))} required />
           <BilingualField label="職位" valueZh={form.title_zh} valueEn={form.title_en} onChangeZh={v => setForm(f => ({...f, title_zh: v}))} onChangeEn={v => setForm(f => ({...f, title_en: v}))} required />
           <BilingualField label="簡介" type="textarea" valueZh={form.bio_zh} valueEn={form.bio_en} onChangeZh={v => setForm(f => ({...f, bio_zh: v}))} onChangeEn={v => setForm(f => ({...f, bio_en: v}))} />
@@ -46,20 +44,20 @@ export default function TeamAdmin() {
           <button onClick={handleSave} className="btn-accent" style={{ fontSize: 13, marginTop: 12 }}>保存</button>
         </AdminCard>
       )}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div className="admin-list-stack">
         {items.map(item => (
-          <div key={item.id} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div key={item.id} className="admin-content-row">
             {item.avatar_url && <img src={item.avatar_url} alt="" style={{ width: 40, height: 40, borderRadius: 10, objectFit: 'cover' }} />}
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 14, fontWeight: 500, color: '#fff' }}>{item.name_zh || item.name_en}</div>
               <div style={{ fontSize: 12, color: '#71717a', marginTop: 2 }}>{item.title_zh || item.title_en} · {groups.find(g => g.value === item.group_name)?.label || item.group_name}</div>
             </div>
             <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 6, background: item.is_active ? 'rgba(34,197,94,0.1)' : 'rgba(113,113,122,0.1)', color: item.is_active ? '#22c55e' : '#71717a' }}>{item.is_active ? '啟用' : '停用'}</span>
-            <button onClick={() => { setEditing(item); setForm(item); setShowForm(true); }} style={btnEdit}>編輯</button>
-            <button onClick={() => { if (confirm('確定刪除？')) adminDelete(`/api/team/${item.id}`).then(load); }} style={btnDel}>刪除</button>
+            <button type="button" onClick={() => { setEditing(item); setForm(item); setShowForm(true); }} className="admin-action">編輯</button>
+            <button type="button" onClick={() => { if (confirm('確定刪除？')) adminDelete(`/api/team/${item.id}`).then(load); }} className="admin-action is-danger">刪除</button>
           </div>
         ))}
-        {items.length === 0 && <div style={{ textAlign: 'center', padding: '48px 0', color: '#52525b', fontSize: 13 }}>暫無團隊成員</div>}
+        {items.length === 0 && <div className="admin-empty-state">暫無團隊成員</div>}
       </div>
     </div>
   );

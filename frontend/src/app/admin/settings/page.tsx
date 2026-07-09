@@ -16,7 +16,9 @@ export default function SettingsAdmin() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 32 }}>系統設置</h1>
+      <div className="admin-page-heading">
+        <h1 className="admin-page-title">系統設置</h1>
+      </div>
       <div style={{ maxWidth: 400 }}>
         <AdminCard title="修改密碼">
           <FormField label="舊密碼"><Input type="password" value={oldPw} onChange={setOldPw} /></FormField>

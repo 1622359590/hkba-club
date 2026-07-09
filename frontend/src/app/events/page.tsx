@@ -25,7 +25,7 @@ export default function EventsPage() {
       <section style={{ paddingBottom: 96 }}>
         <div style={{ ...c, display: 'flex', flexDirection: 'column', gap: 20 }}>
           {events.map((e, i) => (
-            <div key={e.id} className="glass-card" style={{ display: 'flex', overflow: 'hidden', animation: `fadeInUp 0.6s ${0.08 * i}s cubic-bezier(0.22,1,0.36,1) forwards`, opacity: 0 }}>
+            <div key={e.id} className="glass-card content-reveal" style={{ display: 'flex', overflow: 'hidden', animationDelay: `${0.08 * i}s` }}>
               {e.cover_image && <div style={{ width: 240, flexShrink: 0, overflow: 'hidden' }}><img src={imgUrl(e.cover_image)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /></div>}
               <div style={{ padding: 28, flex: 1 }}>
                 <div style={{ display: 'flex', gap: 16, marginBottom: 12, fontSize: 13, color: '#818cf8' }}>

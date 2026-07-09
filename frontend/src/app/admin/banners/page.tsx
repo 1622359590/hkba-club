@@ -6,8 +6,6 @@ import { FormField, Input, BilingualField, ImageField, Toggle, AdminCard } from 
 interface Banner { id: number; title_zh: string; title_en: string; subtitle_zh: string; subtitle_en: string; description_zh: string; description_en: string; image_url: string; link_url: string; video_url: string; sort_order: number; is_active: number; }
 const empty = { title_zh:'', title_en:'', subtitle_zh:'', subtitle_en:'', description_zh:'', description_en:'', image_url:'', link_url:'', video_url:'', sort_order:0, is_active:1 };
 
-const btnEdit: React.CSSProperties = { fontSize: 12, color: '#818cf8', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', borderRadius: 4 };
-const btnDel: React.CSSProperties = { fontSize: 12, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', borderRadius: 4 };
 const badge = (active: boolean): React.CSSProperties => ({ fontSize: 11, padding: '2px 8px', borderRadius: 6, background: active ? 'rgba(34,197,94,0.1)' : 'rgba(113,113,122,0.1)', color: active ? '#22c55e' : '#71717a' });
 
 export default function BannersAdmin() {
@@ -25,12 +23,12 @@ export default function BannersAdmin() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 600, color: '#fff' }}>Banner 管理</h1>
+      <div className="admin-page-heading">
+        <h1 className="admin-page-title">Banner 管理</h1>
         <button onClick={() => { setEditing(null); setForm(empty); setShowForm(true); }} className="btn-accent" style={{ fontSize: 13 }}>+ 新增</button>
       </div>
       {showForm && (
-        <AdminCard title={editing ? '編輯 Banner' : '新增 Banner'} actions={<button onClick={() => { setShowForm(false); setEditing(null); }} style={{ fontSize: 12, color: '#71717a', background: 'none', border: 'none', cursor: 'pointer' }}>取消</button>}>
+        <AdminCard title={editing ? '編輯 Banner' : '新增 Banner'} actions={<button type="button" onClick={() => { setShowForm(false); setEditing(null); }} className="admin-action is-muted">取消</button>}>
           <BilingualField label="標題" valueZh={form.title_zh} valueEn={form.title_en} onChangeZh={v => setForm(f => ({...f, title_zh: v}))} onChangeEn={v => setForm(f => ({...f, title_en: v}))} />
           <BilingualField label="副標題" valueZh={form.subtitle_zh} valueEn={form.subtitle_en} onChangeZh={v => setForm(f => ({...f, subtitle_zh: v}))} onChangeEn={v => setForm(f => ({...f, subtitle_en: v}))} />
           <BilingualField label="描述" type="textarea" valueZh={form.description_zh} valueEn={form.description_en} onChangeZh={v => setForm(f => ({...f, description_zh: v}))} onChangeEn={v => setForm(f => ({...f, description_en: v}))} />
@@ -46,20 +44,20 @@ export default function BannersAdmin() {
           <button onClick={handleSave} className="btn-accent" style={{ fontSize: 13, marginTop: 8 }}>保存</button>
         </AdminCard>
       )}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div className="admin-list-stack">
         {items.map(item => (
-          <div key={item.id} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 12, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div key={item.id} className="admin-content-row">
             {item.image_url && <img src={item.image_url} alt="" style={{ width: 96, height: 48, objectFit: 'cover', borderRadius: 8 }} />}
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 14, fontWeight: 500, color: '#fff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.title_zh || item.title_en}</div>
               <div style={{ fontSize: 12, color: '#71717a', marginTop: 2 }}>{item.subtitle_zh || item.subtitle_en}</div>
             </div>
             <span style={badge(!!item.is_active)}>{item.is_active ? '啟用' : '停用'}</span>
-            <button onClick={() => { setEditing(item); setForm(item); setShowForm(true); }} style={btnEdit}>編輯</button>
-            <button onClick={() => { if (confirm('確定刪除？')) adminDelete(`/api/banners/${item.id}`).then(load); }} style={btnDel}>刪除</button>
+            <button type="button" onClick={() => { setEditing(item); setForm(item); setShowForm(true); }} className="admin-action">編輯</button>
+            <button type="button" onClick={() => { if (confirm('確定刪除？')) adminDelete(`/api/banners/${item.id}`).then(load); }} className="admin-action is-danger">刪除</button>
           </div>
         ))}
-        {items.length === 0 && <div style={{ textAlign: 'center', padding: '48px 0', color: '#52525b', fontSize: 13 }}>暫無 Banner</div>}
+        {items.length === 0 && <div className="admin-empty-state">暫無 Banner</div>}
       </div>
     </div>
   );

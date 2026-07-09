@@ -40,17 +40,17 @@ export default function MessagesAdmin() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
+      <div className="admin-page-heading">
         <div>
-          <h1 style={{ fontSize: 20, fontWeight: 600, color: '#fff', marginBottom: 4 }}>留言管理</h1>
-          <p style={{ fontSize: 13, color: '#71717a' }}>查看前台聯絡表單提交，已處理後可標記已讀或刪除。</p>
+          <h1 className="admin-page-title">留言管理</h1>
+          <p className="admin-page-desc">查看前台聯絡表單提交，已處理後可標記已讀或刪除。</p>
         </div>
         <button onClick={load} className="btn-secondary" style={{ fontSize: 13 }}>刷新</button>
       </div>
-      {error && <div style={{ color: '#ef4444', fontSize: 13, marginBottom: 16 }}>{error}</div>}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {error && <div className="admin-error-state">{error}</div>}
+      <div className="admin-list-stack">
         {items.map(item => (
-          <div key={item.id} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 12, padding: 20 }}>
+          <div key={item.id} className="admin-content-row" style={{ display: 'block', padding: 20 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, marginBottom: 12 }}>
               <div style={{ minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
@@ -63,15 +63,15 @@ export default function MessagesAdmin() {
                 </div>
               </div>
               <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-                {!item.is_read && <button onClick={() => markRead(item.id)} style={{ fontSize: 12, color: '#22c55e', background: 'none', border: 'none', cursor: 'pointer' }}>標記已讀</button>}
-                <button onClick={() => remove(item.id)} style={{ fontSize: 12, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}>刪除</button>
+                {!item.is_read && <button type="button" onClick={() => markRead(item.id)} className="admin-action">標記已讀</button>}
+                <button type="button" onClick={() => remove(item.id)} className="admin-action is-danger">刪除</button>
               </div>
             </div>
             <p style={{ fontSize: 14, color: '#a1a1aa', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>{item.message}</p>
           </div>
         ))}
       </div>
-      {items.length === 0 && !error && <div style={{ textAlign: 'center', padding: '48px 0', color: '#52525b', fontSize: 13 }}>暫無留言</div>}
+      {items.length === 0 && !error && <div className="admin-empty-state">暫無留言</div>}
     </div>
   );
 }

@@ -131,6 +131,7 @@ Admin pages:
 - `/admin/pages`
 - `/admin/team`
 - `/admin/members`
+- `/admin/messages`
 - `/admin/settings`
 
 ## Deployment Notes

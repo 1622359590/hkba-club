@@ -5,8 +5,6 @@ import { FormField, Input, ImageField, AdminCard } from '@/components/admin/Form
 
 interface Partner { id: number; name: string; logo_url: string; website_url: string; group_name: string; sort_order: number; is_active: number; }
 const empty = { name: '', logo_url: '', website_url: '', group_name: 'default', sort_order: 0, is_active: 1 };
-const btnEdit: React.CSSProperties = { fontSize: 12, color: '#818cf8', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', borderRadius: 4 };
-const btnDel: React.CSSProperties = { fontSize: 12, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', borderRadius: 4 };
 
 export default function MembersAdmin() {
   const [items, setItems] = useState<Partner[]>([]);
@@ -23,12 +21,12 @@ export default function MembersAdmin() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 600, color: '#fff' }}>會員單位管理</h1>
+      <div className="admin-page-heading">
+        <h1 className="admin-page-title">會員單位管理</h1>
         <button onClick={() => { setEditing(null); setForm(empty); setShowForm(true); }} className="btn-accent" style={{ fontSize: 13 }}>+ 新增會員</button>
       </div>
       {showForm && (
-        <AdminCard title={editing ? '編輯會員' : '新增會員'} actions={<button onClick={() => { setShowForm(false); setEditing(null); }} style={{ fontSize: 12, color: '#71717a', background: 'none', border: 'none', cursor: 'pointer' }}>取消</button>}>
+        <AdminCard title={editing ? '編輯會員' : '新增會員'} actions={<button type="button" onClick={() => { setShowForm(false); setEditing(null); }} className="admin-action is-muted">取消</button>}>
           <FormField label="名稱" required><Input value={form.name} onChange={v => setForm(f => ({...f, name: v}))} /></FormField>
           <ImageField value={form.logo_url} onChange={v => setForm(f => ({...f, logo_url: v}))} label="Logo" />
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
@@ -45,13 +43,13 @@ export default function MembersAdmin() {
             {item.logo_url && <img src={item.logo_url} alt={item.name} className="admin-member-logo" />}
             <div style={{ width: '100%', fontSize: 13, color: '#fff', marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
             <div style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
-              <button onClick={() => { setEditing(item); setForm(item); setShowForm(true); }} style={btnEdit}>編輯</button>
-              <button onClick={() => { if (confirm('確定刪除？')) adminDelete(`/api/partners/${item.id}`).then(load); }} style={btnDel}>刪除</button>
+              <button type="button" onClick={() => { setEditing(item); setForm(item); setShowForm(true); }} className="admin-action">編輯</button>
+              <button type="button" onClick={() => { if (confirm('確定刪除？')) adminDelete(`/api/partners/${item.id}`).then(load); }} className="admin-action is-danger">刪除</button>
             </div>
           </div>
         ))}
       </div>
-      {items.length === 0 && <div style={{ textAlign: 'center', padding: '48px 0', color: '#52525b', fontSize: 13 }}>暫無會員</div>}
+      {items.length === 0 && <div className="admin-empty-state">暫無會員</div>}
     </div>
   );
 }

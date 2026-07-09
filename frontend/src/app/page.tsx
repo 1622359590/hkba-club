@@ -12,7 +12,7 @@ const sectionBorder: React.CSSProperties = { ...sectionBase, borderTop: '1px sol
 function FadeIn({ children, delay = 0, style = {} }: { children: React.ReactNode; delay?: number; style?: React.CSSProperties }) {
   const [visible, setVisible] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVisible(true), 100 + delay * 1000); return () => clearTimeout(t); }, [delay]);
-  return <div style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)', transition: `all 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}s`, ...style }}>{children}</div>;
+  return <div style={{ opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(20px)', transition: `opacity 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}s, transform 0.7s cubic-bezier(0.22,1,0.36,1) ${delay}s`, ...style }}>{children}</div>;
 }
 
 export default function Home() {
@@ -54,16 +54,16 @@ export default function Home() {
       {/* ═══ HERO ═══ */}
       <section style={{ minHeight: '85vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 0%, rgba(99,102,241,0.1) 0%, transparent 60%)' }} />
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)', backgroundSize: '64px 64px', opacity: 0.5 }} />
+        <div className="grid-lines" style={{ position: 'absolute', inset: 0, opacity: 0.42 }} />
         <div style={{ ...container, position: 'relative', width: '100%', padding: '96px 24px' }}>
           <div style={{ animation: 'fadeInUp 0.8s cubic-bezier(0.22,1,0.36,1) forwards' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '4px 12px', borderRadius: 999, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.03)', fontSize: 12, color: '#a1a1aa', marginBottom: 32 }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', animation: 'pulse 2s infinite' }} />
+              <span className="status-live-dot" />
               {t('香港區塊鏈協會', 'Hong Kong Blockchain Association')}
             </div>
 
             <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1, maxWidth: 700, marginBottom: 20 }}>
-              <span className="gradient-text">{cur ? t(cur.title_zh, cur.title_en) : 'Hong Kong Blockchain Association'}</span>
+              <span className="headline-text">{cur ? t(cur.title_zh, cur.title_en) : 'Hong Kong Blockchain Association'}</span>
             </h1>
 
             {cur?.subtitle_zh && <p style={{ fontSize: 'clamp(1rem, 2vw, 1.3rem)', color: '#818cf8', fontWeight: 500, marginBottom: 12 }}>{t(cur.subtitle_zh, cur.subtitle_en)}</p>}
@@ -88,7 +88,6 @@ export default function Home() {
                   aria-label={t(`切換至第 ${i + 1} 張橫幅`, `Show banner ${i + 1}`)}
                   aria-current={i === idx}
                   onClick={() => setIdx(i)}
-                  style={{ width: i === idx ? 34 : 18 }}
                 />
               ))}
             </div>
@@ -127,7 +126,7 @@ export default function Home() {
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
                     {displayStats.map(s => (
                       <div key={s.id} style={{ textAlign: 'center' }}>
-                        <div className="gradient-text-accent" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 700, marginBottom: 4 }}>{s.value}</div>
+                        <div className="metric-accent" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 700, marginBottom: 4 }}>{s.value}</div>
                         <div style={{ fontSize: 12, color: '#71717a' }}>{t(s.label_zh, s.label_en)}</div>
                       </div>
                     ))}
@@ -194,7 +193,7 @@ export default function Home() {
                   <div style={{ display: 'flex', gap: 24, marginBottom: 40, position: 'relative' }}>
                     <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#6366f1', flexShrink: 0, marginTop: 4, boxShadow: '0 0 0 4px #09090b', position: 'relative', zIndex: 1 }} />
                     <div>
-                      <div className="gradient-text-accent" style={{ fontSize: 28, fontWeight: 700, marginBottom: 4 }}>{m.year}</div>
+                      <div className="metric-accent" style={{ fontSize: 28, fontWeight: 700, marginBottom: 4 }}>{m.year}</div>
                       <h4 style={{ fontSize: 16, fontWeight: 600, marginBottom: 4 }}>{t(m.title_zh, m.title_en)}</h4>
                       <p style={{ fontSize: 14, color: '#71717a', lineHeight: 1.6 }}>{t(m.description_zh, m.description_en)}</p>
                     </div>
@@ -293,8 +292,6 @@ export default function Home() {
           </FadeIn>
         </div>
       </section>
-
-      <style jsx>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`}</style>
     </>
   );
 }
