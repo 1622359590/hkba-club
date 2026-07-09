@@ -227,20 +227,16 @@ body {
 /* ═══ Admin Console ═══ */
 .admin-shell {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 18% 10%, rgba(99,102,241,0.12), transparent 34%),
-    radial-gradient(circle at 90% 0%, rgba(14,165,233,0.08), transparent 28%),
-    #09090b;
+  background: linear-gradient(115deg, #09090b 0%, #0b0d12 58%, #061018 100%);
   display: flex;
 }
 .admin-sidebar {
   width: 264px;
-  background: rgba(10,10,12,0.86);
+  background: rgba(10,10,12,0.96);
   border-right: 1px solid rgba(255,255,255,0.08);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  backdrop-filter: blur(18px);
 }
 .admin-brand {
   min-height: 82px;
@@ -260,7 +256,7 @@ body {
   font-size: 14px;
   font-weight: 800;
   color: #fff;
-  box-shadow: 0 12px 28px rgba(99,102,241,0.28);
+  box-shadow: 0 8px 18px rgba(99,102,241,0.2);
 }
 .admin-nav {
   flex: 1;
@@ -281,15 +277,11 @@ body {
   text-decoration: none;
   font-size: 13px;
   font-weight: 550;
-  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
 }
 .admin-nav-link:hover {
   color: #fff;
   background: rgba(255,255,255,0.055);
-  transform: translateX(2px);
-}
-.admin-nav-link:active {
-  transform: translateX(0);
 }
 .admin-nav-link:focus-visible {
   outline: 2px solid #818cf8;
@@ -338,7 +330,7 @@ body {
   padding: 9px 12px;
   font-size: 13px;
   font-weight: 550;
-  transition: all 0.18s ease;
+  transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
 }
 .admin-logout:hover {
   color: #fff;
@@ -362,8 +354,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  background: rgba(9,9,11,0.64);
-  backdrop-filter: blur(14px);
+  background: rgba(9,9,11,0.96);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -376,7 +367,7 @@ body {
   background: rgba(255,255,255,0.035);
   border: 1px solid rgba(255,255,255,0.075);
   border-radius: 16px;
-  box-shadow: 0 18px 54px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.14);
 }
 .admin-stat-grid {
   display: grid;
@@ -391,15 +382,11 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  transition: border-color 0.14s ease, background 0.14s ease;
 }
 .admin-stat-card:hover {
-  transform: translateY(-3px);
   border-color: rgba(129,140,248,0.26);
   background: rgba(255,255,255,0.052);
-}
-.admin-stat-card:active {
-  transform: translateY(-1px);
 }
 .admin-stat-card:focus-visible {
   outline: 2px solid #818cf8;

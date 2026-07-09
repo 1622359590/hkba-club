@@ -24,7 +24,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     const saved = localStorage.getItem('hkba_admin_token');
     if (!saved && pathname !== '/admin/login') { router.push('/admin/login'); }
-    else { setToken(saved); }
+    else {
+      setToken(saved);
+      if (saved) menu.forEach(item => router.prefetch(item.href));
+    }
   }, [pathname, router]);
 
   if (pathname === '/admin/login') return <>{children}</>;
@@ -46,7 +49,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           {menu.map(item => {
             const active = pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href));
             return (
-              <Link key={item.href} href={item.href} className={`admin-nav-link ${active ? 'is-active' : ''}`} aria-current={active ? 'page' : undefined}>
+              <Link key={item.href} href={item.href} prefetch className={`admin-nav-link ${active ? 'is-active' : ''}`} aria-current={active ? 'page' : undefined}>
                 <span className="admin-nav-icon">
                   <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.65} d={item.icon} /></svg>
                 </span>

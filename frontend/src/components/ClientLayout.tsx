@@ -9,17 +9,15 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith('/admin');
 
+  if (isAdmin) return <>{children}</>;
+
   return (
     <LangProvider>
-      {isAdmin ? (
-        <>{children}</>
-      ) : (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-          <Header />
-          <main style={{ paddingTop: 64, flex: 1 }}>{children}</main>
-          <Footer />
-        </div>
-      )}
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <Header />
+        <main style={{ paddingTop: 64, flex: 1 }}>{children}</main>
+        <Footer />
+      </div>
     </LangProvider>
   );
 }
