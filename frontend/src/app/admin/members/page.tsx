@@ -39,12 +39,12 @@ export default function MembersAdmin() {
           <button onClick={handleSave} className="btn-accent" style={{ fontSize: 13, marginTop: 8 }}>保存</button>
         </AdminCard>
       )}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 16 }}>
+      <div className="admin-member-grid">
         {items.map(item => (
-          <div key={item.id} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 12, padding: 20, textAlign: 'center' }}>
-            {item.logo_url && <img src={item.logo_url} alt={item.name} style={{ maxHeight: 40, maxWidth: 120, objectFit: 'contain', margin: '0 auto 12px', opacity: 0.7, filter: 'grayscale(1)' }} />}
-            <div style={{ fontSize: 13, color: '#fff', marginBottom: 4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 8 }}>
+          <div key={item.id} className="admin-panel admin-member-card">
+            {item.logo_url && <img src={item.logo_url} alt={item.name} className="admin-member-logo" />}
+            <div style={{ width: '100%', fontSize: 13, color: '#fff', marginBottom: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: 8 }}>
               <button onClick={() => { setEditing(item); setForm(item); setShowForm(true); }} style={btnEdit}>編輯</button>
               <button onClick={() => { if (confirm('確定刪除？')) adminDelete(`/api/partners/${item.id}`).then(load); }} style={btnDel}>刪除</button>
             </div>
