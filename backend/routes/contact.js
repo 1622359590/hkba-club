@@ -39,6 +39,13 @@ router.get('/messages', authMiddleware, (req, res) => {
   res.json(items);
 });
 
+// 管理：获取未读消息数量
+router.get('/messages/unread-count', authMiddleware, (req, res) => {
+  const db = getDb();
+  const row = db.prepare('SELECT COUNT(*) as count FROM contact_messages WHERE is_read = 0').get();
+  res.json({ count: row?.count || 0 });
+});
+
 // 管理：标记已读
 router.put('/messages/:id/read', authMiddleware, (req, res) => {
   const db = getDb();

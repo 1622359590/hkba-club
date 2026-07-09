@@ -1,7 +1,8 @@
 'use client';
-import { useEffect, useState, ReactNode } from 'react';
+import { useCallback, useEffect, useState, ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { adminGet } from '@/lib/adminApi';
 
 const menu = [
   { href: '/admin', label: '儀表板', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -19,16 +20,32 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
+  const [unreadMessages, setUnreadMessages] = useState(0);
   const activeItem = menu.find(item => pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href)));
+
+  const refreshUnreadMessages = useCallback(() => {
+    adminGet<{ count: number }>('/api/contact/messages/unread-count')
+      .then(data => setUnreadMessages(data.count))
+      .catch(() => setUnreadMessages(0));
+  }, []);
 
   useEffect(() => {
     const saved = localStorage.getItem('hkba_admin_token');
     if (!saved && pathname !== '/admin/login') { router.push('/admin/login'); }
     else {
       setToken(saved);
-      if (saved) menu.forEach(item => router.prefetch(item.href));
+      if (saved) {
+        menu.forEach(item => router.prefetch(item.href));
+        refreshUnreadMessages();
+      }
     }
-  }, [pathname, router]);
+  }, [pathname, refreshUnreadMessages, router]);
+
+  useEffect(() => {
+    const handler = () => refreshUnreadMessages();
+    window.addEventListener('hkba:messages-updated', handler);
+    return () => window.removeEventListener('hkba:messages-updated', handler);
+  }, [refreshUnreadMessages]);
 
   if (pathname === '/admin/login') return <>{children}</>;
   if (!token) return <div style={{ minHeight: '100vh', background: '#09090b', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><span style={{ color: '#71717a', fontSize: 13 }}>載入中...</span></div>;
@@ -52,8 +69,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               <Link key={item.href} href={item.href} prefetch className={`admin-nav-link ${active ? 'is-active' : ''}`} aria-current={active ? 'page' : undefined}>
                 <span className="admin-nav-icon">
                   <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.65} d={item.icon} /></svg>
+                  {item.href === '/admin/messages' && unreadMessages > 0 && <span className="admin-notification-dot" />}
                 </span>
                 {item.label}
+                {item.href === '/admin/messages' && unreadMessages > 0 && <span className="admin-notification-count">{unreadMessages > 99 ? '99+' : unreadMessages}</span>}
               </Link>
             );
           })}

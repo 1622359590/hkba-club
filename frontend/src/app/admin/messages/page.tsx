@@ -27,12 +27,14 @@ export default function MessagesAdmin() {
 
   const markRead = async (id: number) => {
     await adminPut(`/api/contact/messages/${id}/read`, {});
+    window.dispatchEvent(new Event('hkba:messages-updated'));
     load();
   };
 
   const remove = async (id: number) => {
     if (!confirm('確定刪除此留言？')) return;
     await adminDelete(`/api/contact/messages/${id}`);
+    window.dispatchEvent(new Event('hkba:messages-updated'));
     load();
   };
 

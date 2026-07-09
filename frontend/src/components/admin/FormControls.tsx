@@ -45,18 +45,28 @@ export function BilingualField({ label, valueZh, valueEn, onChangeZh, onChangeEn
 
 export function ImageField({ value, onChange, label }: { value: string; onChange: (v: string) => void; label: string }) {
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]; if (!file) return; setUploading(true);
-    try { const { adminUpload } = await import('@/lib/adminApi'); const r = await adminUpload(file, 'general'); onChange(r.url); } catch { alert('上傳失敗'); } finally { setUploading(false); }
+    const file = e.target.files?.[0]; if (!file) return; setUploading(true); setUploadError('');
+    try {
+      const { adminUpload } = await import('@/lib/adminApi');
+      const r = await adminUpload(file, 'general');
+      onChange(r.url);
+    } catch {
+      setUploadError('上傳失敗，請稍後重試或直接輸入圖片 URL。');
+    } finally {
+      setUploading(false);
+    }
   };
   return (
     <FormField label={label}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
         {value && <img src={value.startsWith('http') ? value : `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:37900'}${value}`} alt="" style={{ width: 56, height: 56, objectFit: 'cover', borderRadius: 8, border: '1px solid rgba(255,255,255,0.06)' }} />}
-        <label style={{ cursor: 'pointer', padding: '6px 12px', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 6, fontSize: 12, color: '#a1a1aa', transition: 'all 0.2s' }}>{uploading ? '上傳中...' : '選擇圖片'}<input type="file" accept="image/*" onChange={handleUpload} style={{ display: 'none' }} /></label>
+        <label style={{ cursor: 'pointer', padding: '6px 12px', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 6, fontSize: 12, color: '#a1a1aa', transition: 'border-color 0.2s, color 0.2s, background 0.2s' }}>{uploading ? '上傳中...' : '選擇圖片'}<input type="file" accept="image/*" onChange={handleUpload} style={{ display: 'none' }} /></label>
         {value && <button onClick={() => onChange('')} style={{ fontSize: 12, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}>移除</button>}
       </div>
       <Input value={value} onChange={onChange} placeholder="或輸入圖片 URL" />
+      {uploadError && <p style={{ color: '#fca5a5', fontSize: 12, marginTop: 6 }}>{uploadError}</p>}
     </FormField>
   );
 }

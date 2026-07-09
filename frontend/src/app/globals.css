@@ -497,6 +497,7 @@ label {
   background: #818cf8;
 }
 .admin-nav-icon {
+  position: relative;
   width: 28px;
   height: 28px;
   border-radius: 9px;
@@ -506,6 +507,32 @@ label {
   background: rgba(255,255,255,0.04);
   color: currentColor;
   flex: 0 0 auto;
+}
+.admin-notification-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #ef4444;
+  box-shadow: 0 0 0 2px #111114, 0 0 12px rgba(239,68,68,0.6);
+}
+.admin-notification-count {
+  margin-left: auto;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(239,68,68,0.16);
+  color: #fca5a5;
+  border: 1px solid rgba(239,68,68,0.26);
+  font-size: 11px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
 }
 .admin-sidebar-footer {
   padding: 14px 12px;
